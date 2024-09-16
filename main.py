@@ -1,6 +1,6 @@
-from APP_ID_KEY import APP_ID, APP_KEY
 import requests
 from datetime import datetime
+import os
 
 WEIGHT_KG = 87
 HEIGHT_CM = 176
@@ -8,11 +8,12 @@ AGE = 36
 GENDER = 'male'
 
 exercise_endpoint = 'https://trackapi.nutritionix.com/v2/natural/exercise'
-sheety_endpoint = 'https://api.sheety.co/1c5b23146396cb65c6f420bc852f5579/workoutTracking/workouts'
+sheety_endpoint = os.environ['NT_SHEETY_ENDPOINT']
+# sheety_endpoint = 'https://api.sheety.co/1c5b23146396cb65c6f420bc852f5579/workoutTracking/workouts'
 
 headers = {
-    'x-app-id': APP_ID,
-    'x-app-key': APP_KEY
+    'x-app-id': os.environ["NT_APP_ID"],
+    'x-app-key': os.environ["NT_APP_KEY"]
 }
 
 
@@ -53,9 +54,36 @@ for exercise in result["exercises"]:
 #         }
 # }
 
+# Basic Authentication
+'''
 
-sheet_response = requests.post(sheety_endpoint, json=sheet_inputs)
+sheet_response = requests.post(sheety_endpoint, json=sheet_inputs, auth=(os.environ['NT_USERNAME'], os.environ['NT_PASSWORD']))
+
+'''
+
+# Bearer Token Authentication
+
+token = os.environ['NT_TOKEN']
+headers = {"Authorization": f"Bearer {token}"}
+
+sheet_response = requests.post(sheety_endpoint, json=sheet_inputs, headers=headers)
+
+
+
+
+# sheet_response = requests.post(sheety_endpoint, json=sheet_inputs)
 
 print(sheet_response.text)
 
+
+
+# References for authentication
+
+'''
+https://sheety.co/docs/authentication.html
+https://stackoverflow.com/questions/29931671/making-an-api-call-in-python-with-an-api-that-requires-a-bearer-token
+https://requests.readthedocs.io/en/latest/user/authentication/#basic-authentication
+
+
+'''
 
