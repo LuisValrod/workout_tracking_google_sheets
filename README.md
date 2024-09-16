@@ -25,6 +25,7 @@ Install the necessary libraries using: `pip install requests`
 The script requires several environment variables for API authentication and access. You can set these up using a .env file or through your system environment variables.
 
 <br>
+
 | Variable Name       | Description                                        |
 |---------------------|----------------------------------------------------|
 | `NT_APP_ID`         | Your Nutritionix API App ID                        |
